@@ -15,8 +15,6 @@
         }
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
@@ -326,6 +324,13 @@
             try {
                 startTime = Date.now();
                 tokenCount = 0;
+                
+                // 創建一個不含 metadata 的訊息副本
+                const messagesWithoutMetadata = conversations.map(({ role, content }) => ({
+                    role,
+                    content
+                }));
+
                 const response = await fetch(`${serverUrl}/v1/chat/completions`, {
                     method: 'POST',
                     headers: {
@@ -335,7 +340,7 @@
                     },
                     body: JSON.stringify({
                         model: model,
-                        messages: conversations,
+                        messages: messagesWithoutMetadata,
                         stream: true,
                     })
                 });
